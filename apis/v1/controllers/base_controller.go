@@ -13,7 +13,7 @@ var DB *gorm.DB
 type BaseController struct{}
 
 func SetDB() {
-	fmt.Println("SETTING DB INSTANCE IN CONTROLLER...", database.GetDB())
+	fmt.Println("SETTING DB INSTANCE IN CONTROLLER...")
 	DB = database.GetDB()
 }
 
