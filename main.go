@@ -1,7 +1,7 @@
 package main
 
-import "gin-app/apis"
+import v1 "gin-app/apis/v1"
 
 func main() {
-	apis.Run()
+	v1.Run()
 }

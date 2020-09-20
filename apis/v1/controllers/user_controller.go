@@ -1,14 +1,16 @@
 package controllers
 
 import (
-	"gin-app/apis/models"
+	"gin-app/apis/v1/models"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
-func (s *Server) CreateUser(c *gin.Context) {
+type UserController struct{}
+
+func (uc *UserController) CreateUser(c *gin.Context) {
 	var user models.User
 	if err := c.ShouldBind(&user); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
@@ -18,7 +20,7 @@ func (s *Server) CreateUser(c *gin.Context) {
 		return
 	}
 
-	createdUser, err := user.CreateUser(s.DB)
+	createdUser, err := user.CreateUser(DB)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"status": http.StatusInternalServerError,
@@ -33,10 +35,9 @@ func (s *Server) CreateUser(c *gin.Context) {
 	})
 }
 
-func (s *Server) GetUsers(c *gin.Context) {
+func (uc *UserController) GetUsers(c *gin.Context) {
 	user := models.User{}
-
-	users, err := user.GetAllUsers(s.DB)
+	users, err := user.GetAllUsers(DB)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			"status": http.StatusNotFound,
@@ -51,7 +52,7 @@ func (s *Server) GetUsers(c *gin.Context) {
 	})
 }
 
-func (s *Server) UpdateUser(c *gin.Context) {
+func (uc *UserController) UpdateUser(c *gin.Context) {
 	UID := c.Param("id")
 	userID, err := strconv.ParseUint(UID, 10, 64)
 	if err != nil {
@@ -62,7 +63,7 @@ func (s *Server) UpdateUser(c *gin.Context) {
 	}
 
 	userStr := models.User{}
-	user, err := userStr.GetUser(s.DB, userID)
+	user, err := userStr.GetUser(DB, userID)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"message": "No User found with given id.",
@@ -78,7 +79,7 @@ func (s *Server) UpdateUser(c *gin.Context) {
 		return
 	}
 
-	updatedUser, err := user.UpdateUser(s.DB)
+	updatedUser, err := user.UpdateUser(DB)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"status": http.StatusInternalServerError,
