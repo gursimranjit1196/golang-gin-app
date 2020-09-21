@@ -8,6 +8,8 @@ type User struct {
 	gorm.Model
 	Username string `gorm:"size:255;not null;unique" json:"username" binding:"required"`
 	Email    string `gorm:"size:100;not null;unique" json:"email" binding:"required"`
+
+	Posts []Post
 }
 
 func (u *User) CreateUser(DB *gorm.DB) (*User, error) {

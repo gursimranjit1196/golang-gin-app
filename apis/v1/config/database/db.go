@@ -25,6 +25,7 @@ func InitDB() {
 func DBMigrations() {
 	DB.Debug().AutoMigrate(
 		&models.User{},
+		&models.Post{},
 	)
 	fmt.Println("DB MIGRATIONS DONE...")
 }
