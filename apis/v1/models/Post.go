@@ -2,6 +2,7 @@ package models
 
 import (
 	"github.com/jinzhu/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type Post struct {
@@ -10,12 +11,12 @@ type Post struct {
 	Content string `gorm:"size:255;not null" json:"content" binding:"required"`
 	UserID  int    `json:"user_id"`
 
-	User User
+	User User `binding:"-"`
 }
 
 func (p *Post) CreatePost(DB *gorm.DB) (*Post, error) {
 	var err error
-	err = DB.Debug().Model(&Post{}).Create(&p).Error
+	err = DB.Debug().Model(&Post{}).Omit(clause.Associations).Create(&p).Error
 	if err != nil {
 		return p, err
 	}

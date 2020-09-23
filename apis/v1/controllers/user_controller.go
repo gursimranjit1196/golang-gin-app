@@ -5,6 +5,9 @@ import (
 	"net/http"
 	"strconv"
 
+	jwtUtil "gin-app/apis/v1/utils/jwt"
+
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 )
 
@@ -29,10 +32,22 @@ func (uc *UserController) CreateUser(c *gin.Context) {
 		return
 	}
 
+	authToken, err := getUserAuthToken(createdUser)
+
 	c.JSON(http.StatusCreated, gin.H{
-		"status":   http.StatusCreated,
-		"response": createdUser,
+		"status": http.StatusCreated,
+		"response": map[string]interface{}{
+			"user":      createdUser,
+			"authToken": authToken,
+		},
 	})
+}
+
+func getUserAuthToken(user *models.User) (string, error) {
+	claims := jwt.MapClaims{}
+	claims["id"] = user.ID
+	claims["username"] = user.Username
+	return jwtUtil.CreateToken(claims)
 }
 
 func (uc *UserController) GetUsers(c *gin.Context) {
@@ -52,9 +67,39 @@ func (uc *UserController) GetUsers(c *gin.Context) {
 	})
 }
 
+func (uc *UserController) GetUser(c *gin.Context) {
+	UID := c.Param("id")
+	userID, err := strconv.Atoi(UID)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": "Invalid User Id",
+		})
+		return
+	}
+
+	userStruct := models.User{}
+	user, err := userStruct.GetUser(DB, userID)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": "No User found with given id.",
+		})
+		return
+	}
+
+	authToken, err := getUserAuthToken(user)
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": http.StatusOK,
+		"response": map[string]interface{}{
+			"user":      user,
+			"authToken": authToken,
+		},
+	})
+}
+
 func (uc *UserController) UpdateUser(c *gin.Context) {
 	UID := c.Param("id")
-	userID, err := strconv.ParseUint(UID, 10, 64)
+	userID, err := strconv.Atoi(UID)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"message": "Invalid User Id",

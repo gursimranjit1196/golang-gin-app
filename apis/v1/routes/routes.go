@@ -23,6 +23,7 @@ func InitRoutes() *gin.Engine {
 	r.POST("/user", userController.CreateUser)
 	r.GET("/users", userController.GetUsers)
 	r.PUT("/users/:id", userController.UpdateUser)
+	r.GET("/users/:id", userController.GetUser)
 
 	// Post Controller Routes
 	postController := controllers.PostController{}

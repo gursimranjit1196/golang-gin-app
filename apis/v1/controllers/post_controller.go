@@ -10,10 +10,10 @@ import (
 type PostController struct{}
 
 func (uc *PostController) CreatePost(c *gin.Context) {
-	u := models.User{}
-	loggedInUser, err := u.GetUser(DB, 1)
+	lUser, exists := c.Get("loggedInUser")
+	loggedInUser := lUser.(*models.User)
 
-	if err != nil {
+	if !exists {
 		c.JSON(401, gin.H{
 			"message": "N0 logged in user found.",
 		})
@@ -21,7 +21,7 @@ func (uc *PostController) CreatePost(c *gin.Context) {
 	}
 
 	var post models.Post
-	post.User = *loggedInUser
+	post.UserID = int(loggedInUser.ID)
 	if err := c.ShouldBind(&post); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
 			"status":  http.StatusUnprocessableEntity,

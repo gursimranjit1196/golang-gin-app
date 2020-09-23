@@ -33,7 +33,7 @@ func (p *User) GetAllUsers(DB *gorm.DB) (*[]User, error) {
 	return &users, nil
 }
 
-func (u *User) GetUser(DB *gorm.DB, id uint64) (*User, error) {
+func (u *User) GetUser(DB *gorm.DB, id int) (*User, error) {
 	var err error
 	err = DB.Debug().Model(&User{}).Where("id = ?", id).Take(&u).Error
 	if err != nil {
