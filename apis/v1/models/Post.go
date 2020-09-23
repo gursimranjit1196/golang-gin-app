@@ -22,3 +22,14 @@ func (p *Post) CreatePost(DB *gorm.DB) (*Post, error) {
 
 	return p, nil
 }
+
+func (p *Post) GetAllPosts(DB *gorm.DB) (*[]Post, error) {
+	var err error
+	posts := []Post{}
+	err = DB.Debug().Model(&Post{}).Preload("User").Find(&posts).Error
+	if err != nil {
+		return &[]Post{}, err
+	}
+
+	return &posts, nil
+}

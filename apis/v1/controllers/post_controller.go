@@ -44,3 +44,20 @@ func (uc *PostController) CreatePost(c *gin.Context) {
 		"response": createdPost,
 	})
 }
+
+func (uc *PostController) GetPosts(c *gin.Context) {
+	post := models.Post{}
+	posts, err := post.GetAllPosts(DB)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"status": http.StatusNotFound,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":   http.StatusOK,
+		"response": posts,
+	})
+}

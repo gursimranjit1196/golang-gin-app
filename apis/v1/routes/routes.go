@@ -27,6 +27,7 @@ func InitRoutes() *gin.Engine {
 	// Post Controller Routes
 	postController := controllers.PostController{}
 	r.POST("/post", postController.CreatePost)
+	r.GET("/posts", postController.GetPosts)
 
 	return r
 }

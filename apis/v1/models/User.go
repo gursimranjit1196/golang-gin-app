@@ -25,7 +25,7 @@ func (u *User) CreateUser(DB *gorm.DB) (*User, error) {
 func (p *User) GetAllUsers(DB *gorm.DB) (*[]User, error) {
 	var err error
 	users := []User{}
-	err = DB.Debug().Model(&User{}).Find(&users).Error
+	err = DB.Debug().Model(&User{}).Preload("Posts").Find(&users).Error
 	if err != nil {
 		return &[]User{}, err
 	}
