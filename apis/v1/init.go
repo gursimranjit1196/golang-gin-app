@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"gin-app/apis/v1/config/database"
 	"gin-app/apis/v1/config/server"
+	"gin-app/apis/v1/constants"
 	"gin-app/apis/v1/controllers"
 	"gin-app/apis/v1/routes"
+	"gin-app/apis/v1/utils/loggers"
 )
 
 func init() {
-	fmt.Println("INITIALIZING V1 API SERVER...")
+	loggers.Log(constants.InitV1APIServer)
 }
 
 func Run() {
@@ -19,7 +21,7 @@ func Run() {
 	routes := routes.InitRoutes()
 
 	apiPort := fmt.Sprintf(":%s", "9000")
-	fmt.Printf("LISTENING TO PORT %s...", apiPort)
+	loggers.Log(constants.ListingToPort, apiPort)
 
 	server.Run(apiPort, routes)
 }

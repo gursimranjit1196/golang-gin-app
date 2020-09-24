@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"fmt"
 	"gin-app/apis/v1/controllers"
 	"gin-app/apis/v1/middlewares"
 
@@ -9,7 +8,6 @@ import (
 )
 
 func InitRoutes() *gin.Engine {
-	fmt.Println("INITIALIZING ROUTES...")
 	r := gin.Default()
 
 	r.Use(middlewares.Authenticate())

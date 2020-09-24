@@ -1,9 +1,10 @@
 package middlewares
 
 import (
-	"fmt"
+	"gin-app/apis/v1/constants"
 	"gin-app/apis/v1/models"
 	"gin-app/apis/v1/services/user_service"
+	"gin-app/apis/v1/utils/loggers"
 	"gin-app/apis/v1/utils/wrappers"
 	"net/http"
 
@@ -12,8 +13,6 @@ import (
 
 func Authenticate() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		fmt.Println("AUTHENTICATING...")
-
 		if skipUrlAuth(c.FullPath()) {
 			c.Next()
 			return
@@ -48,7 +47,7 @@ func skipUrlAuth(path string) bool {
 }
 
 func onAuthTokenMissing(c *gin.Context) {
-	fmt.Println("AUTH TOKEN MISSING...")
+	loggers.Log(constants.MissingAuthToken)
 	c.JSON(http.StatusUnauthorized, gin.H{
 		"status": http.StatusUnauthorized,
 		"error":  "Auth token missing",
@@ -57,7 +56,7 @@ func onAuthTokenMissing(c *gin.Context) {
 }
 
 func onInvalidUserToken(c *gin.Context, err error) {
-	fmt.Println("INVALIDATE USER TOKEN...", err.Error())
+	loggers.Log(constants.InvalidAuthToken, err.Error())
 	c.JSON(http.StatusUnauthorized, gin.H{
 		"status": http.StatusUnauthorized,
 		"error":  err.Error(),
@@ -68,5 +67,5 @@ func onInvalidUserToken(c *gin.Context, err error) {
 func onValidUserToken(c *gin.Context, loggedInUser *models.User) {
 	c.Set("loggedInUser", loggedInUser)
 
-	fmt.Println("LOGGED IN USER IS...", loggedInUser)
+	loggers.Log(constants.LoggedInUser, loggedInUser)
 }

@@ -2,7 +2,9 @@ package database
 
 import (
 	"fmt"
+	"gin-app/apis/v1/constants"
 	"gin-app/apis/v1/models"
+	"gin-app/apis/v1/utils/loggers"
 
 	"github.com/jinzhu/gorm"
 )
@@ -10,14 +12,14 @@ import (
 var DB *gorm.DB
 
 func InitDB() {
-	fmt.Println("INITIALIZING DATABASE...")
+	loggers.Log(constants.InitDB)
 	DBURL := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable", "localhost", "5432", "gursimranjit", "gin-app")
 	db, err := gorm.Open("postgres", DBURL)
 	if err != nil {
-		fmt.Println("UNABLE TO CONNECT DB")
+		loggers.Log(constants.UnableToConnectDB)
 	} else {
 		DB = db
-		fmt.Println("CONNECTED WITH DATABASE...")
+		loggers.Log(constants.DBConnected)
 		DBMigrations()
 	}
 }
@@ -27,7 +29,7 @@ func DBMigrations() {
 		&models.User{},
 		&models.Post{},
 	)
-	fmt.Println("DB MIGRATIONS DONE...")
+	loggers.Log(constants.DBMigrated)
 }
 
 func GetDB() *gorm.DB {

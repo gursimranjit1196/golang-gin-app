@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"gin-app/apis/v1/config/database"
 
 	"github.com/gin-gonic/gin"
@@ -13,7 +12,6 @@ var DB *gorm.DB
 type BaseController struct{}
 
 func SetDB() {
-	fmt.Println("SETTING DB INSTANCE IN CONTROLLER...")
 	DB = database.GetDB()
 }
 
