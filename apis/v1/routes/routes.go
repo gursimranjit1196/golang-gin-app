@@ -20,7 +20,7 @@ func InitRoutes() *gin.Engine {
 
 	// User Controller Routes
 	userController := controllers.UserController{}
-	r.POST("/user", userController.CreateUser)
+	r.POST("/signup", userController.CreateUser)
 	r.GET("/users", userController.GetUsers)
 	r.PUT("/users/:id", userController.UpdateUser)
 	r.GET("/users/:id", userController.GetUser)
