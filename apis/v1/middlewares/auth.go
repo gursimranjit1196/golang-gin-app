@@ -5,8 +5,8 @@ import (
 	"gin-app/apis/v1/models"
 	"gin-app/apis/v1/services/user_service"
 	"gin-app/apis/v1/utils/loggers"
+	"gin-app/apis/v1/utils/response_handler"
 	"gin-app/apis/v1/utils/wrappers"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -47,25 +47,19 @@ func skipUrlAuth(path string) bool {
 }
 
 func onAuthTokenMissing(c *gin.Context) {
-	loggers.Log(constants.MissingAuthToken)
-	c.JSON(http.StatusUnauthorized, gin.H{
-		"status": http.StatusUnauthorized,
-		"error":  "Auth token missing",
-	})
+	loggers.Log(constants.MissingAuthTokenLog)
+	response_handler.Error(c, 401, constants.AuthTokenMissingMsg)
 	c.Abort()
 }
 
 func onInvalidUserToken(c *gin.Context, err error) {
-	loggers.Log(constants.InvalidAuthToken, err.Error())
-	c.JSON(http.StatusUnauthorized, gin.H{
-		"status": http.StatusUnauthorized,
-		"error":  err.Error(),
-	})
+	loggers.Log(constants.InvalidAuthTokenLog, err.Error())
+	response_handler.Error(c, 401, constants.InvalidAuthTokenLog)
 	c.Abort()
 }
 
 func onValidUserToken(c *gin.Context, loggedInUser *models.User) {
-	c.Set("loggedInUser", loggedInUser)
+	c.Set(constants.LoggedInUserKey, loggedInUser)
 
-	loggers.Log(constants.LoggedInUser, loggedInUser)
+	loggers.Log(constants.LoggedInUserLog, loggedInUser)
 }

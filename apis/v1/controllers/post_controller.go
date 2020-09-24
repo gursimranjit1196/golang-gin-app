@@ -1,8 +1,9 @@
 package controllers
 
 import (
+	"gin-app/apis/v1/constants"
 	"gin-app/apis/v1/models"
-	"net/http"
+	"gin-app/apis/v1/utils/response_handler"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,54 +11,37 @@ import (
 type PostController struct{}
 
 func (uc *PostController) CreatePost(c *gin.Context) {
-	lUser, exists := c.Get("loggedInUser")
-	loggedInUser := lUser.(*models.User)
-
+	lUser, exists := c.Get(constants.LoggedInUserKey)
 	if !exists {
-		c.JSON(401, gin.H{
-			"message": "N0 logged in user found.",
-		})
+		response_handler.Error(c, 401, constants.NoLoggedInUserMsg)
 		return
 	}
+
+	loggedInUser := lUser.(*models.User)
 
 	var post models.Post
 	post.UserID = int(loggedInUser.ID)
 	if err := c.ShouldBind(&post); err != nil {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{
-			"status":  http.StatusUnprocessableEntity,
-			"message": err.Error(),
-		})
+		response_handler.Error(c, 412, err.Error())
 		return
 	}
 
 	createdPost, err := post.CreatePost(DB)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"status": http.StatusInternalServerError,
-			"error":  err.Error(),
-		})
+		response_handler.Error(c, 412, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{
-		"status":   http.StatusCreated,
-		"response": createdPost,
-	})
+	response_handler.Success(c, 201, constants.PostCreatedSuccessfullyMsg, createdPost)
 }
 
 func (uc *PostController) GetPosts(c *gin.Context) {
 	post := models.Post{}
 	posts, err := post.GetAllPosts(DB)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"status": http.StatusNotFound,
-			"error":  err.Error(),
-		})
+		response_handler.Error(c, 500, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"status":   http.StatusOK,
-		"response": posts,
-	})
+	response_handler.Success(c, 200, constants.PostsFetchedSuccessfullyMsg, posts)
 }

@@ -12,14 +12,14 @@ import (
 var DB *gorm.DB
 
 func InitDB() {
-	loggers.Log(constants.InitDB)
+	loggers.Log(constants.InitDBLog)
 	DBURL := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable", "localhost", "5432", "gursimranjit", "gin-app")
 	db, err := gorm.Open("postgres", DBURL)
 	if err != nil {
-		loggers.Log(constants.UnableToConnectDB)
+		loggers.Log(constants.UnableToConnectDBLog)
 	} else {
 		DB = db
-		loggers.Log(constants.DBConnected)
+		loggers.Log(constants.DBConnectedLog)
 		DBMigrations()
 	}
 }
@@ -29,7 +29,7 @@ func DBMigrations() {
 		&models.User{},
 		&models.Post{},
 	)
-	loggers.Log(constants.DBMigrated)
+	loggers.Log(constants.DBMigratedLog)
 }
 
 func GetDB() *gorm.DB {

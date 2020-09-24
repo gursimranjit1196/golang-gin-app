@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"gin-app/apis/v1/config/database"
+	"gin-app/apis/v1/constants"
+	"gin-app/apis/v1/utils/response_handler"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -16,7 +18,5 @@ func SetDB() {
 }
 
 func (bc *BaseController) Ping(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "GIN APP IS WORKING...",
-	})
+	response_handler.Success(c, 200, constants.V1ApisWorkingMsg, nil)
 }

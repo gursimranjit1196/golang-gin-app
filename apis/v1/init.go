@@ -11,7 +11,7 @@ import (
 )
 
 func init() {
-	loggers.Log(constants.InitV1APIServer)
+	loggers.Log(constants.InitV1APIServerLog)
 }
 
 func Run() {
@@ -21,7 +21,7 @@ func Run() {
 	routes := routes.InitRoutes()
 
 	apiPort := fmt.Sprintf(":%s", "9000")
-	loggers.Log(constants.ListingToPort, apiPort)
+	loggers.Log(constants.ListingToPortLog, apiPort)
 
 	server.Run(apiPort, routes)
 }
