@@ -12,7 +12,6 @@ type Post struct {
 	Name    string `gorm:"size:255;not null;unique" json:"name" binding:"required" validate:"gte=3,lte=20"`
 	Content string `gorm:"size:255;not null" json:"content" binding:"required" validate:"gte=5,lte=100"`
 	UserID  int    `json:"user_id"`
-	User    User   `binding:"-"`
 }
 
 func (p *Post) CreatePost(DB *gorm.DB) (*Post, error) {
@@ -31,12 +30,13 @@ func (p *Post) CreatePost(DB *gorm.DB) (*Post, error) {
 	return p, nil
 }
 
-func (p *Post) GetAllPosts(DB *gorm.DB) (*[]Post, error) {
+func (p *Post) GetAllPosts(DB *gorm.DB) (*[]PostWithAssociationSerializer, error) {
 	var err error
-	posts := []Post{}
-	err = DB.Debug().Model(&Post{}).Preload("User").Find(&posts).Error
+	posts := []PostWithAssociationSerializer{}
+	err = DB.Debug().Table("posts").Preload("User").Find(&posts).Error
+
 	if err != nil {
-		return &[]Post{}, err
+		return &[]PostWithAssociationSerializer{}, err
 	}
 
 	return &posts, nil
