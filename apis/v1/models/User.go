@@ -5,11 +5,9 @@ import (
 )
 
 type User struct {
-	gorm.Model
+	BaseModel
 	Username string `gorm:"size:255;not null;unique" json:"username" binding:"required"`
 	Email    string `gorm:"size:100;not null;unique" json:"email" binding:"required"`
-
-	Posts []Post
 }
 
 func (u *User) CreateUser(DB *gorm.DB) (*User, error) {
@@ -22,20 +20,19 @@ func (u *User) CreateUser(DB *gorm.DB) (*User, error) {
 	return u, nil
 }
 
-func (p *User) GetAllUsers(DB *gorm.DB) (*[]User, error) {
-	var err error
-	users := []User{}
-	err = DB.Debug().Model(&User{}).Preload("Posts").Find(&users).Error
+func (p *User) GetAllUsers(DB *gorm.DB) (*[]UserWithAssociationSerializer, error) {
+	users := []UserWithAssociationSerializer{}
+	err := DB.Debug().Table("users").Preload("Posts").Find(&users).Error
+
 	if err != nil {
-		return &[]User{}, err
+		return &[]UserWithAssociationSerializer{}, err
 	}
 
 	return &users, nil
 }
 
 func (u *User) GetUser(DB *gorm.DB, id int) (*User, error) {
-	var err error
-	err = DB.Debug().Model(&User{}).Where("id = ?", id).Take(&u).Error
+	err := DB.Debug().Model(&User{}).Where("id = ?", id).Take(&u).Error
 	if err != nil {
 		return &User{}, err
 	}

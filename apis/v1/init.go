@@ -7,7 +7,7 @@ import (
 	"gin-app/apis/v1/config/validator"
 	"gin-app/apis/v1/constants"
 	"gin-app/apis/v1/controllers"
-	"gin-app/apis/v1/models/modelvalidators"
+	modelvalidators "gin-app/apis/v1/models/validators"
 	"gin-app/apis/v1/routes"
 	"gin-app/apis/v1/utils/loggers"
 )

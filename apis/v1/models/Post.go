@@ -8,7 +8,7 @@ import (
 )
 
 type Post struct {
-	gorm.Model
+	BaseModel
 	Name    string `gorm:"size:255;not null;unique" json:"name" binding:"required" validate:"gte=3,lte=20"`
 	Content string `gorm:"size:255;not null" json:"content" binding:"required" validate:"gte=5,lte=100"`
 	UserID  int    `json:"user_id"`
