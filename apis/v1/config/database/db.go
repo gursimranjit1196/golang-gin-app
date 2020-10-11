@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"gin-app/apis/v1/config/channels"
 	"gin-app/apis/v1/constants"
 	"gin-app/apis/v1/models"
 	"gin-app/apis/v1/utils/loggers"
@@ -17,6 +18,7 @@ func InitDB() {
 	db, err := gorm.Open("postgres", DBURL)
 	if err != nil {
 		loggers.Log(constants.UnableToConnectDBLog)
+		channels.CriticalErrorChannel <- constants.UnableToConnectDBLog
 	} else {
 		DB = db
 		loggers.Log(constants.DBConnectedLog)

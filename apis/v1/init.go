@@ -2,6 +2,7 @@ package v1
 
 import (
 	"fmt"
+	"gin-app/apis/v1/config/channels"
 	"gin-app/apis/v1/config/database"
 	"gin-app/apis/v1/config/server"
 	"gin-app/apis/v1/config/validator"
@@ -17,6 +18,8 @@ func init() {
 }
 
 func Run() {
+	channels.InitChannels()
+
 	database.InitDB()
 	controllers.SetDB()
 

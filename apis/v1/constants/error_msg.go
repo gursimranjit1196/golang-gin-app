@@ -3,6 +3,7 @@ package constants
 const (
 	UnprocessableEntityMsg = "UnprocessableEntity - Please enter valid Data"
 	InternalServerErrorMsg = "Internal Server Error - Please try again later"
+	CriticalErrorMsg       = "Encountered Critical Error"
 
 	// Auth
 	InvalidAuthTokenMsg = "Invalid Auth Token"
