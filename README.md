@@ -16,9 +16,9 @@ There are CRUD operations with User and Post Model and the Authorization details
 - Channels are used to handle some special cases.
 
 # To run the app
-- go run main.go
+- go run main.go\
 OR
-- To auto reload server when changes are made in your code(use nodemon)
+- To auto reload server when changes are made in your code(use nodemon)\
 nodemon --exec go run main.go --signal SIGTERM
 
 # Few User Endpoints
