@@ -41,6 +41,7 @@ func skipUrlAuth(path string) bool {
 	whitelistURLs := []string{
 		"/signup",
 		"/signin",
+		"/users/:id",
 	}
 	_, found := wrappers.Find(whitelistURLs, path)
 	return found
